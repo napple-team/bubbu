@@ -1,0 +1,15 @@
+{
+  "name": "bubbu",
+  "version": "1.0.0",
+  "description": "bubbu desuwa!",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/napple-team/bubbu.git"
+  },
+  "author": "Napple Team",
+  "license": "MIT"
+}
