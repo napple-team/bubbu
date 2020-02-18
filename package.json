@@ -11,5 +11,10 @@
     "url": "git+ssh://git@github.com/napple-team/bubbu.git"
   },
   "author": "Napple Team",
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "eslint": "^6.8.0",
+    "eslint-config-airbnb-base": "^14.0.0",
+    "eslint-plugin-import": "^2.20.1"
+  }
 }
