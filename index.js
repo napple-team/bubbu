@@ -12,14 +12,18 @@ app.message(/https:\/\/twitter.com/, async ({ message, context }) => {
       token: process.env.SLACK_USER_TOKEN,
       query: `in:<#${message.channel}> ${match}`,
     });
-    if (searchResponse.messages.total > 0) {
-      await app.client.reactions.add({
-        token: context.botToken,
-        channel: message.channel,
-        name: 'x',
-        timestamp: message.ts,
-      });
-    }
+
+    if (searchResponse.messages.total === 0) return;
+    // NOTE: 同じアイテムが引っかかることがあるっぽいので除外
+    // eslint-disable-next-line max-len
+    if (searchResponse.messages.matches.filter((item) => item.ts !== message.ts).length === 0) return;
+
+    await app.client.reactions.add({
+      token: context.botToken,
+      channel: message.channel,
+      name: 'x',
+      timestamp: message.ts,
+    });
   });
 });
 
