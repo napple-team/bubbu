@@ -1,4 +1,5 @@
 const { App } = require('@slack/bolt');
+const axios = require('axios');
 
 const app = new App({
   token: process.env.SLACK_BOT_TOKEN,
@@ -13,17 +14,23 @@ app.message(/https:\/\/twitter.com/, async ({ message, context }) => {
       query: `in:<#${message.channel}> ${match}`,
     });
 
-    if (searchResponse.messages.total === 0) return;
-    // NOTE: 同じアイテムが引っかかることがあるっぽいので除外
-    // eslint-disable-next-line max-len
-    if (searchResponse.messages.matches.filter((item) => item.ts !== message.ts).length === 0) return;
-
-    await app.client.reactions.add({
-      token: context.botToken,
-      channel: message.channel,
-      name: 'x',
-      timestamp: message.ts,
-    });
+    if (searchResponse.messages.matches.filter((item) => item.ts !== message.ts).length !== 0) {
+      await app.client.reactions.add({
+        token: context.botToken,
+        channel: message.channel,
+        name: 'x',
+        timestamp: message.ts,
+      });
+    } else {
+      if ( !!process.env.GANBARUBY_ENABLE ) {
+        await axios.post(`${process.env.GANBARUBY_URL}/post`, { tweetUrl: match }, {
+          auth: {
+            username: process.env.GANBARUBY_BASIC_USER,
+            password: process.env.GANBARUBY_BASIC_PASS,
+          }
+        })
+      }
+    }
   });
 });
 
