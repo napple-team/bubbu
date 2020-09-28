@@ -15,7 +15,7 @@
   "devDependencies": {
     "eslint": "^7.1.0",
     "eslint-config-airbnb-base": "^14.1.0",
-    "eslint-plugin-import": "^2.20.2"
+    "eslint-plugin-import": "^2.22.1"
   },
   "dependencies": {
     "@slack/bolt": "^1.6.0",
