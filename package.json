@@ -18,7 +18,7 @@
     "eslint-plugin-import": "^2.20.2"
   },
   "dependencies": {
-    "@slack/bolt": "^1.6.0",
+    "@slack/bolt": "^2.7.0",
     "axios": "^0.20.0"
   }
 }
