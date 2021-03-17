@@ -24,7 +24,7 @@ app.message(/https:\/\/twitter.com/, async ({ message, context }) => {
         timestamp: message.ts,
       });
     } else {
-      if ( !!process.env.GANBARUBY_ENABLE ) {
+      if (process.env.GANBARUBY_ENABLE) {
         await axios.post(`${process.env.GANBARUBY_URL}/post`, { tweetUrl: match }, {
           auth: {
             username: process.env.GANBARUBY_BASIC_USER,
