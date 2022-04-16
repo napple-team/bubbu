@@ -14,11 +14,11 @@
   "author": "Napple Team",
   "license": "MIT",
   "devDependencies": {
-    "eslint": "^8.11.0",
+    "eslint": "^8.13.0",
     "eslint-plugin-node": "^11.1.0"
   },
   "dependencies": {
-    "@slack/bolt": "^3.10.0",
+    "@slack/bolt": "^3.11.0",
     "axios": "^0.26.1"
   }
 }
