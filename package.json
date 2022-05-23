@@ -14,7 +14,7 @@
   "author": "Napple Team",
   "license": "MIT",
   "devDependencies": {
-    "eslint": "^8.15.0",
+    "eslint": "^8.16.0",
     "eslint-plugin-node": "^11.1.0"
   },
   "dependencies": {
