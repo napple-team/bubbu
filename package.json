@@ -14,8 +14,8 @@
   "author": "Napple Team",
   "license": "MIT",
   "devDependencies": {
-    "eslint": "^8.22.0",
-    "eslint-plugin-node": "^11.1.0"
+    "eslint": "8.22.0",
+    "eslint-plugin-node": "11.1.0"
   },
   "dependencies": {
     "@slack/bolt": "^3.12.1",
