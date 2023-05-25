@@ -26,7 +26,7 @@ app.message(/https:\/\/twitter.com/, async ({ message, context }) => {
       });
     } else {
       if (process.env.GANBARUBY_ENABLE) {
-        await axios.post(`${process.env.GANBARUBY_URL}/post`, { tweetUrl: match }, {
+        await axios.post(`${process.env.GANBARUBY_URL}/save`, { tweetUrl: match }, {
           auth: {
             username: process.env.GANBARUBY_BASIC_USER,
             password: process.env.GANBARUBY_BASIC_PASS,
