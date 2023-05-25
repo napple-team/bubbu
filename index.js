@@ -8,9 +8,10 @@ const app = new App({
 
 app.message(/https:\/\/twitter.com/, async ({ message, context }) => {
   const matchPettern = new RegExp('https://twitter.com/[a-zA-Z0-9_]+/status/[0-9]+', 'gi');
-  message.text.match(matchPettern).filter(
+  const tweetUrls = message.text.match(matchPettern).filter(
     (match, currentIndex, matches) => matches.indexOf(match) === currentIndex
-  ).forEach(async (match) => {
+  );
+  await Promise.all(tweetUrls.map(async (match) => {
     const searchResponse = await app.client.search.messages({
       token: process.env.SLACK_USER_TOKEN,
       query: `in:<#${message.channel}> ${match}`,
@@ -25,7 +26,7 @@ app.message(/https:\/\/twitter.com/, async ({ message, context }) => {
       });
     } else {
       if (process.env.GANBARUBY_ENABLE) {
-        await axios.post(`${process.env.GANBARUBY_URL}/post`, { tweetUrl: match }, {
+        await axios.post(`${process.env.GANBARUBY_URL}/save`, { tweetUrl: match }, {
           auth: {
             username: process.env.GANBARUBY_BASIC_USER,
             password: process.env.GANBARUBY_BASIC_PASS,
@@ -33,7 +34,7 @@ app.message(/https:\/\/twitter.com/, async ({ message, context }) => {
         })
       }
     }
-  });
+  }));
 });
 
 (async () => {
