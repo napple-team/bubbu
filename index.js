@@ -6,7 +6,7 @@ const app = new App({
   signingSecret: process.env.SLACK_SIGNING_SECRET,
 });
 
-app.message(/https:\/\/twitter.com/, async ({ message, context }) => {
+app.message(/https:\/\/twitter.com/, async ({ message, context, say }) => {
   const matchPettern = new RegExp('https://twitter.com/[a-zA-Z0-9_]+/status/[0-9]+', 'gi');
   const tweetUrls = message.text.match(matchPettern).filter(
     (match, currentIndex, matches) => matches.indexOf(match) === currentIndex
@@ -18,20 +18,31 @@ app.message(/https:\/\/twitter.com/, async ({ message, context }) => {
     });
 
     if (searchResponse.messages.matches.filter((item) => item.ts !== message.ts).length !== 0) {
-      await app.client.reactions.add({
-        token: context.botToken,
-        channel: message.channel,
-        name: 'x',
-        timestamp: message.ts,
-      });
+      try {
+        await app.client.reactions.add({
+          token: context.botToken,
+          channel: message.channel,
+          name: 'x',
+          timestamp: message.ts,
+        });
+      } catch (err) {
+        console.error(err);
+      }
     } else {
       if (process.env.GANBARUBY_ENABLE) {
-        await axios.post(`${process.env.GANBARUBY_URL}/save`, { tweetUrl: match }, {
-          auth: {
-            username: process.env.GANBARUBY_BASIC_USER,
-            password: process.env.GANBARUBY_BASIC_PASS,
-          }
-        })
+        try {
+          await axios.post(`${process.env.GANBARUBY_URL}/save`, { tweetUrl: match }, {
+            auth: {
+              username: process.env.GANBARUBY_BASIC_USER,
+              password: process.env.GANBARUBY_BASIC_PASS,
+            }
+          });
+        } catch (err) {
+          await say({
+            text: '|c||^.-^|| 画像の保存に失敗しましたわ〜!',
+            thread_ts: message.ts
+          });
+        }
       }
     }
   }));
