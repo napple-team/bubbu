@@ -6,15 +6,22 @@ const app = new App({
   signingSecret: process.env.SLACK_SIGNING_SECRET,
 });
 
-app.message(/https:\/\/twitter.com/, async ({ message, context, say }) => {
-  const matchPettern = new RegExp('https://twitter.com/[a-zA-Z0-9_]+/status/[0-9]+', 'gi');
-  const tweetUrls = message.text.match(matchPettern).filter(
+app.message(/https:\/\/(twitter|x).com/, async ({ message, context, say }) => {
+  const matchPattern = new RegExp('https://(twitter|x).com/[a-zA-Z0-9_]+/status/[0-9]+', 'gi');
+  const matches = message.text.match(matchPattern);
+  if (!matches) {
+    return;
+  }
+  // 同じURLを排除する (x.com / twitter.com の混在はしょうがない)
+  const tweetUrls = matches.filter(
     (match, currentIndex, matches) => matches.indexOf(match) === currentIndex
   );
+
   await Promise.all(tweetUrls.map(async (match) => {
+    const tweetId = match.split('/').pop();
     const searchResponse = await app.client.search.messages({
       token: process.env.SLACK_USER_TOKEN,
-      query: `in:<#${message.channel}> ${match}`,
+      query: `in:<#${message.channel}> ${tweetId}`,
     });
 
     if (searchResponse.messages.matches.filter((item) => item.ts !== message.ts).length !== 0) {
