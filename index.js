@@ -1,9 +1,17 @@
-const { App } = require('@slack/bolt');
+const { App, ExpressReceiver } = require('@slack/bolt');
 const axios = require('axios');
+
+const receiver = new ExpressReceiver({
+  signingSecret: process.env.SLACK_SIGNING_SECRET,
+});
+
+receiver.router.get('/', (req, res) => {
+  res.send('|c||^.-^||');
+});
 
 const app = new App({
   token: process.env.SLACK_BOT_TOKEN,
-  signingSecret: process.env.SLACK_SIGNING_SECRET,
+  receiver,
 });
 
 app.message(/https:\/\/(twitter|x).com/, async ({ message, context, say }) => {
